@@ -1,0 +1,73 @@
+{% extends 'base.html.twig' %}
+
+{% block body %}
+    <form action="{{ path('export_list') }}" method="get">
+        <fieldset>
+            <legend>Destination</legend>
+            <select name="destinationId">
+                <option value=""></option>
+                {% for destination in destinations %}
+                    <option value="{{ destination.id|e }}" {% if request.destinationId == destination.id %} selected {% endif %}>{{ destination.name|e }}</option>
+                {% endfor %}
+            </select>
+        </fieldset>
+        <fieldset>
+            <legend>From</legend>
+            <input type="datetime-local" name="createdAtFrom" {% if request.createdAtFrom is not null %} value="{{ request.createdAtFrom|date('Y-m-d\TH:i:s') }}" {% endif %}>
+        </fieldset>
+        <fieldset>
+            <legend>Until</legend>
+            <input type="datetime-local" name="createdAtUntil" {% if request.createdAtUntil is not null %} value="{{ request.createdAtUntil|date('Y-m-d\TH:i:s') }}" {% endif %}>
+        </fieldset>
+        <fieldset>
+            <legend>Press to search</legend>
+            <button type="submit">Search</button>
+        </fieldset>
+    </form>
+    <hr>
+    <table width="100%" border="1">
+        <thead>
+            <tr>
+                <th>
+                    <span>Name</span>
+                </th>
+                <th>
+                    <span>Date</span>
+                </th>
+                <th>
+                    <span>Time</span>
+                </th>
+                <th>
+                    <span>Created by</span>
+                </th>
+                <th>
+                    <span>Destination</span>
+                </th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for export in exports %}
+                <tr>
+                    <td>
+                        <span>{{ export.name|e }}</span><br>
+                        <small>{{ export.id|e }}</small>
+                    </td>
+                    <td>
+                        <span>{{ export.createdAt|date("Y-m-d") }}</span>
+                    </td>
+                    <td>
+                        <span>{{ export.createdAt|date("H:i:s") }}</span>
+                    </td>
+                    <td>
+                        <span>{{ export.createdBy.name|e }}</span><br>
+                        <small><span>{{ export.createdBy.id|e }}</span></small>
+                    </td>
+                    <td>
+                        <span>{{ export.destination.name|e }}</span><br>
+                        <small><span>{{ export.destination.id|e }}</span></small>
+                    </td>
+                </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+{% endblock %}
